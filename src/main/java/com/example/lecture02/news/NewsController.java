@@ -38,5 +38,10 @@ public class NewsController {
         return newsService.updateNewsById(newsId, news);
     }
 
+    @DeleteMapping("/id/{newsId}")
+    public void deleteNewsById(@PathVariable long newsId) {
+        newsService.deleteNewsById(newsId);
+    }
+
 
 }

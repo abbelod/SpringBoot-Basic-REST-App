@@ -1,6 +1,5 @@
 package com.example.lecture02.news;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -42,5 +41,9 @@ public class NewsService {
         existingNews.setAddedAt(LocalDateTime.now());
 
         return newsRepository.save(existingNews);
+    }
+
+    public void deleteNewsById(long newsId) {
+        newsRepository.deleteById(newsId);
     }
 }
