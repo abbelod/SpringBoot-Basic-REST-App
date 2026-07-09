@@ -1,0 +1,34 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 1
+      author: Talha
+
+      changes:
+        - createTable:
+            tableName: news
+
+            columns:
+
+              - column:
+                  name: news_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+
+              - column:
+                  name: content
+                  type: VARCHAR(255)
+
+              - column:
+                  name: added_by
+                  type: VARCHAR(255)
+
+              - column:
+                  name: added_at
+                  type: TIMESTAMP

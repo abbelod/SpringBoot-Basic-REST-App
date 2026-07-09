@@ -1,0 +1,52 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 2
+      author: your-name
+
+      changes:
+        - insert:
+            tableName: news
+            columns:
+              - column:
+                  name: news_id
+                  value: 2
+
+              - column:
+                  name: title
+                  value: "Spring Boot Introduction"
+
+              - column:
+                  name: content
+                  value: "Learning Spring Boot with JPA, Hibernate, and Liquibase."
+
+              - column:
+                  name: added_by
+                  value: "Admin"
+
+              - column:
+                  name: added_at
+                  valueDate: "2026-07-09T10:00:00"
+
+        - insert:
+            tableName: news
+            columns:
+              - column:
+                  name: news_id
+                  value: 1
+
+              - column:
+                  name: title
+                  value: "Understanding Hibernate"
+
+              - column:
+                  name: content
+                  value: "Hibernate is an ORM framework used by JPA."
+
+              - column:
+                  name: added_by
+                  value: "John"
+
+              - column:
+                  name: added_at
+                  valueDate: "2026-07-09T11:00:00"
