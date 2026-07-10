@@ -1,5 +1,7 @@
 package com.example.lecture02.news;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,9 +18,8 @@ public class NewsService {
         this.newsRepository = newsRepository;
     }
 
-    public List<News> findAll() {
-
-        return newsRepository.findAll();
+    public Page<News> findAll(Pageable pageable) {
+        return newsRepository.findAll(pageable);
     }
 
     public Optional<News> findNewsById(Long newsId) {
@@ -43,7 +44,12 @@ public class NewsService {
         return newsRepository.save(existingNews);
     }
 
-    public void deleteNewsById(long newsId) {
+    public boolean deleteNewsById(long newsId) {
+
+        if(!newsRepository.existsById(newsId)) {
+            return false;
+        }
         newsRepository.deleteById(newsId);
+        return true;
     }
 }
