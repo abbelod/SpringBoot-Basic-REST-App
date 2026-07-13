@@ -28,7 +28,6 @@ public class NewsController {
         return newsService.findAll(pageable);
     }
 
-
     @GetMapping("/id/{newsId}")
     public ResponseEntity<News> findNewsById(@PathVariable Long newsId) {
         Optional<News> news =  newsService.findNewsById(newsId);
@@ -38,7 +37,6 @@ public class NewsController {
         }
         return ResponseEntity.notFound().build();
     }
-
 
     @PostMapping
     public ResponseEntity<News> uploadNews(@RequestBody News news) {
