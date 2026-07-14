@@ -1,13 +1,25 @@
 package com.example.lecture02.news;
 
+import com.example.lecture02.config.SecurityConfig;
+import com.example.lecture02.user.User;
+import com.example.lecture02.user.UserRepository;
 import org.apache.commons.collections4.functors.ExceptionPredicate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -15,12 +27,17 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Import(SecurityConfig.class)
 public class NewsControllerIntegrationTest {
+
+    @Autowired
+    private WebApplicationContext context;
 
     @Autowired
     private MockMvc mockMvc;
@@ -28,20 +45,27 @@ public class NewsControllerIntegrationTest {
     @Autowired
     private NewsRepository newsRepository;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private NewsService newsService;
 
     @BeforeEach
     void setup() {
 
+        this.mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                        .apply(springSecurity())
+                                .build();
+
         newsRepository.deleteAll();
 
         News news1 = new News();
-        news1.setNewsId(1L);
         news1.setTitle("Spring Boot");
         news1.setContent("Spring Boot Content");
 
         News news2 = new News();
-        news2.setNewsId(2L);
         news2.setTitle("Java");
         news2.setContent("Java Content");
 
@@ -130,6 +154,30 @@ public class NewsControllerIntegrationTest {
 
         mockMvc.perform(delete("/api/v1/news/id/1"))
                 .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    @WithMockUser(username = "readerUser", roles = {"READER"})
+    void reader_ShouldNotBeAbleToUploadNews() throws Exception {
+        News mockNews = new News();
+        mockNews.setTitle("Unauthorized Article");
+        mockNews.setContent("This should fail");
+
+        mockMvc.perform(post("/api/v1/news")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(mockNews)))
+                .andDo(result -> {
+                    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                    System.out.println(auth);
+                });
+
+        mockMvc.perform(post("/api/v1/news")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(mockNews)))
+                .andExpect(status().isForbidden());
+
+//        Mockito.verifyNoInteractions(newsService);
 
     }
 
