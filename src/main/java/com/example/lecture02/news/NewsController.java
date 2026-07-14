@@ -7,9 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.plaf.OptionPaneUI;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,14 +41,17 @@ public class NewsController {
     }
 
     @PostMapping
-    public ResponseEntity<News> uploadNews(@RequestBody News news) {
-        News uploadedNews = newsService.uploadNews(news);
+    public ResponseEntity<News> uploadNews(@RequestBody News news, Authentication authentication) {
+        News uploadedNews = newsService.uploadNews(news, authentication.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(uploadedNews);
     }
 
     @PostMapping("/id/{newsId}")
-    public ResponseEntity<News> updateNewsById(@PathVariable long newsId, @RequestBody News news) {
-        News updatedNews = newsService.updateNewsById(newsId, news);
+    public ResponseEntity<News> updateNewsById(@PathVariable long newsId, @RequestBody News news, Authentication authentication) throws AccessDeniedException {
+
+        boolean isEditor =authentication.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.equals("ROLE_EDITOR"));
+
+        News updatedNews = newsService.updateNewsById(newsId, news, authentication.getName(), isEditor);
         return ResponseEntity.ok(updatedNews);
     }
 

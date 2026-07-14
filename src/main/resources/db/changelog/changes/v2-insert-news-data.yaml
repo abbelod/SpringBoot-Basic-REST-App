@@ -8,9 +8,6 @@ databaseChangeLog:
         - insert:
             tableName: news
             columns:
-              - column:
-                  name: news_id
-                  value: 2
 
               - column:
                   name: title
@@ -31,10 +28,6 @@ databaseChangeLog:
         - insert:
             tableName: news
             columns:
-              - column:
-                  name: news_id
-                  value: 1
-
               - column:
                   name: title
                   value: "Understanding Hibernate"

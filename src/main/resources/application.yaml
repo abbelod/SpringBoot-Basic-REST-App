@@ -5,12 +5,21 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
+    open-in-view: false
   application:
     name: lecture02
+  security:
+    user:
+      name: user
+      password: user
+      roles: USER
 logging:
+  file:
+    name: logs/myapp.log
   level:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: TRACE
+
 management:
 
   tracing:
@@ -21,8 +30,12 @@ management:
       export:
         otlp:
           endpoint: http://localhost:4318/v1/traces
-  otlp:
-    metrics:
-      export:
-        url: http://localhost:4318/v1/traces
-        enabled: true
+#  otlp:
+#    metrics:
+#      export:
+#        url: http://localhost:4318/v1/traces
+#        enabled: true
+jdbc:
+  datasource-proxy:
+    enabled: true
+  includes: connection, query, fetch

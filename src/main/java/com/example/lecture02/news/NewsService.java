@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -26,19 +27,22 @@ public class NewsService {
         return newsRepository.findById(newsId);
     }
 
-    public News uploadNews(News news) {
+    public News uploadNews(News news, String username) {
+        news.setAddedBy(username);
         news.setAddedAt(LocalDateTime.now());
         return newsRepository.save(news);
     }
 
-    public News updateNewsById(Long newsId, News updatedNews) {
+    public News updateNewsById(Long newsId, News updatedNews, String username, boolean isEditor) throws AccessDeniedException {
 
         News existingNews = newsRepository.findById(newsId).orElseThrow(() -> new RuntimeException("News not found!"));
 
+        if(!isEditor && !existingNews.getAddedBy().equals(username)) {
+            throw new AccessDeniedException("Access Denied: Reporters can only edit their own news");
+        }
+
         existingNews.setTitle(updatedNews.getTitle());
         existingNews.setContent(updatedNews.getContent());
-        existingNews.setAddedBy(updatedNews.getAddedBy());
-
         existingNews.setAddedAt(LocalDateTime.now());
 
         return newsRepository.save(existingNews);

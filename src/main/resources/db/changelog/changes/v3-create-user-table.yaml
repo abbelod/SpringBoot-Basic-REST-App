@@ -1,35 +1,31 @@
 databaseChangeLog:
-
   - changeSet:
-      id: 1
+      id: 01-create-users-table
       author: Talha
-
       changes:
         - createTable:
-            tableName: news
-
+            tableName: users
             columns:
-
               - column:
-                  name: news_id
+                  name: id
                   type: BIGINT
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
-
               - column:
-                  name: title
+                  name: username
                   type: VARCHAR(255)
-
+                  constraints:
+                    nullable: false
+                    unique: true
               - column:
-                  name: content
+                  name: password
                   type: VARCHAR(255)
-
+                  constraints:
+                    nullable: false
               - column:
-                  name: added_by
-                  type: VARCHAR(255)
-
-              - column:
-                  name: added_at
-                  type: TIMESTAMP
+                  name: role
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false

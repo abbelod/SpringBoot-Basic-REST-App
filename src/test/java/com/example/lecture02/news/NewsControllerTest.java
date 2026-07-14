@@ -99,7 +99,7 @@ public class NewsControllerTest {
         savedNews.setTitle("Test News");
         savedNews.setContent("Test News Content");
 
-        Mockito.when(newsService.uploadNews(any(News.class)))
+        Mockito.when(newsService.uploadNews(any(News.class), any(String.class)))
                 .thenReturn(savedNews);
 
         mockMvc.perform(post("/api/v1/news")

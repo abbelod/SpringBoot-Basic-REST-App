@@ -4,3 +4,5 @@ databaseChangeLog:
       file: db/changelog/changes/v1-create-news-table.yaml
   - include:
       file: db/changelog/changes/v2-insert-news-data.yaml
+  - include:
+      file: db/changelog/changes/v3-create-user-table.yaml
