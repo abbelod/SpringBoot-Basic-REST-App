@@ -49,7 +49,8 @@ public class NewsController {
     @PostMapping("/id/{newsId}")
     public ResponseEntity<News> updateNewsById(@PathVariable long newsId, @RequestBody News news, Authentication authentication) throws AccessDeniedException {
 
-        boolean isEditor =authentication.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.equals("ROLE_EDITOR"));
+        boolean isEditor = authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_EDITOR"));
 
         News updatedNews = newsService.updateNewsById(newsId, news, authentication.getName(), isEditor);
         return ResponseEntity.ok(updatedNews);
