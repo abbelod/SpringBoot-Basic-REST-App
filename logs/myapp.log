@@ -598,3 +598,162 @@ Caused by: java.net.ConnectException: Connection refused
 2026-07-15T09:16:33.776+05:00  INFO 8143 --- [lecture02] [SpringApplicationShutdownHook] [                                                 ] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-07-15T09:16:43.781+05:00  INFO 8143 --- [lecture02] [SpringApplicationShutdownHook] [                                                 ] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2026-07-15T09:16:43.782+05:00  INFO 8143 --- [lecture02] [SpringApplicationShutdownHook] [                                                 ] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-15T09:25:48.916+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] c.e.l.n.NewsControllerIntegrationTest    : Starting NewsControllerIntegrationTest using Java 25.0.3 with PID 8589 (started by talha.ahmed in /home/talha.ahmed/IdeaProjects/lecture02)
+2026-07-15T09:25:48.918+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] c.e.l.n.NewsControllerIntegrationTest    : No active profile set, falling back to 1 default profile: "default"
+2026-07-15T09:25:50.168+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-15T09:25:50.220+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 42 ms. Found 2 JPA repository interfaces.
+2026-07-15T09:25:50.879+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-15T09:25:51.072+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:f43a3ff1-4af4-44d7-aa11-26fa88d350e6 user=SA
+2026-07-15T09:25:51.074+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-15T09:25:51.568+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] i.m.c.instrument.push.PushMeterRegistry  : Publishing metrics for OtlpMeterRegistry every 1m to http://localhost:4318/v1/metrics with resource attributes {service.name=lecture02}
+2026-07-15T09:25:51.767+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.database                       : Set default schema name to PUBLIC
+2026-07-15T09:25:54.406+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.changelog                      : Creating database changelog table with name: PUBLIC.DATABASECHANGELOG
+2026-07-15T09:25:54.502+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.changelog                      : Reading from PUBLIC.DATABASECHANGELOG
+2026-07-15T09:25:54.525+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.snapshot                       : Creating snapshot
+2026-07-15T09:25:54.624+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.lockservice                    : Successfully acquired change log lock
+2026-07-15T09:25:54.625+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.command                        : Using deploymentId: 4089551180
+2026-07-15T09:25:54.629+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.changelog                      : Reading from PUBLIC.DATABASECHANGELOG
+2026-07-15T09:25:54.659+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.ui                             : Running Changeset: db/changelog/changes/v1-create-news-table.yaml::1::Talha
+2026-07-15T09:25:54.673+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.changelog                      : Table news created
+2026-07-15T09:25:54.674+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.changelog                      : ChangeSet db/changelog/changes/v1-create-news-table.yaml::1::Talha ran successfully in 13ms
+2026-07-15T09:25:54.687+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.ui                             : Running Changeset: db/changelog/changes/v2-insert-news-data.yaml::2::your-name
+2026-07-15T09:25:54.692+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.changelog                      : New row inserted into news
+2026-07-15T09:25:54.696+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.changelog                      : New row inserted into news
+2026-07-15T09:25:54.696+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.changelog                      : ChangeSet db/changelog/changes/v2-insert-news-data.yaml::2::your-name ran successfully in 8ms
+2026-07-15T09:25:54.701+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.ui                             : Running Changeset: db/changelog/changes/v3-create-user-table.yaml::01-create-users-table::Talha
+2026-07-15T09:25:54.708+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.changelog                      : Table users created
+2026-07-15T09:25:54.708+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.changelog                      : ChangeSet db/changelog/changes/v3-create-user-table.yaml::01-create-users-table::Talha ran successfully in 6ms
+2026-07-15T09:25:54.720+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.util                           : UPDATE SUMMARY
+2026-07-15T09:25:54.720+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.util                           : Run:                          3
+2026-07-15T09:25:54.720+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.util                           : Previously run:               0
+2026-07-15T09:25:54.720+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.util                           : Filtered out:                 0
+2026-07-15T09:25:54.721+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.util                           : -------------------------------
+2026-07-15T09:25:54.721+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.util                           : Total change sets:            3
+2026-07-15T09:25:54.722+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.util                           : Update summary generated
+2026-07-15T09:25:54.725+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.command                        : Update command completed successfully.
+2026-07-15T09:25:54.725+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.ui                             : Liquibase: Update has been successful. Rows affected: 2
+2026-07-15T09:25:54.728+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.lockservice                    : Successfully released change log lock
+2026-07-15T09:25:54.730+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] liquibase.command                        : Command execution complete
+2026-07-15T09:25:54.814+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-07-15T09:25:54.870+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.19.Final
+2026-07-15T09:25:55.323+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-15T09:25:55.391+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:h2:mem:f43a3ff1-4af4-44d7-aa11-26fa88d350e6]
+	Database driver: H2 JDBC Driver
+	Database dialect: H2Dialect
+	Database version: 2.3.232
+	Default catalog/schema: F43A3FF1-4AF4-44D7-AA11-26FA88D350E6/PUBLIC
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: 100
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-15T09:25:56.147+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-15T09:25:56.178+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-15T09:25:56.258+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-15T09:25:56.805+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-07-15T09:25:57.664+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-07-15T09:25:57.664+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-07-15T09:25:57.677+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-07-15T09:25:57.685+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 21 ms
+2026-07-15T09:25:57.806+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] c.e.l.n.NewsControllerIntegrationTest    : Started NewsControllerIntegrationTest in 9.266 seconds (process running for 11.064)
+2026-07-15T09:25:58.144+05:00 DEBUG 8589 --- [lecture02] [main] [                                                 ] org.hibernate.SQL                        : select count(*) from users u1_0
+2026-07-15T09:25:58.268+05:00 DEBUG 8589 --- [lecture02] [main] [                                                 ] org.hibernate.SQL                        : insert into users (password,role,username,id) values (?,?,?,default)
+2026-07-15T09:25:58.270+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [$2a$10$UXEywdNCHsHyBAbDPhHiE.fJi86dpJvpFlWRViUsU/xhRHWJpgu3.]
+2026-07-15T09:25:58.272+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [ROLE_READER]
+2026-07-15T09:25:58.273+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [readerUser]
+2026-07-15T09:25:58.360+05:00 DEBUG 8589 --- [lecture02] [main] [                                                 ] org.hibernate.SQL                        : insert into users (password,role,username,id) values (?,?,?,default)
+2026-07-15T09:25:58.361+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [$2a$10$fqiBEyBDaIpHMC9mLO4ACu7Pb83tm7gKIv/BVgjQHT1Xd0JOjibHq]
+2026-07-15T09:25:58.361+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [ROLE_EDITOR]
+2026-07-15T09:25:58.361+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [editorUser]
+2026-07-15T09:25:58.443+05:00 DEBUG 8589 --- [lecture02] [main] [                                                 ] org.hibernate.SQL                        : insert into users (password,role,username,id) values (?,?,?,default)
+2026-07-15T09:25:58.443+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [$2a$10$9oC7FjWbkshJc5X24sZAWOd.l2VYZ6AqFv2HS8UfpzvHGP0HqyjpO]
+2026-07-15T09:25:58.443+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [ROLE_REPORTER]
+2026-07-15T09:25:58.444+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [reporterUser1]
+2026-07-15T09:25:58.521+05:00 DEBUG 8589 --- [lecture02] [main] [                                                 ] org.hibernate.SQL                        : insert into users (password,role,username,id) values (?,?,?,default)
+2026-07-15T09:25:58.521+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [$2a$10$o23BchMQMlVUNHVFkaD.C.xFi2ypAy33oO0G4r1BuaW7WP0g0/.Fi]
+2026-07-15T09:25:58.522+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [ROLE_REPORTER]
+2026-07-15T09:25:58.522+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [reporterUser2]
+2026-07-15T09:25:58.525+05:00  WARN 8589 --- [lecture02] [main] [                                                 ] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-07-15T09:25:58.525+05:00  WARN 8589 --- [lecture02] [main] [                                                 ] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-07-15T09:25:58.797+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-07-15T09:25:58.797+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-07-15T09:25:58.799+05:00  INFO 8589 --- [lecture02] [main] [                                                 ] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2026-07-15T09:25:58.813+05:00 DEBUG 8589 --- [lecture02] [main] [                                                 ] org.hibernate.SQL                        : select n1_0.news_id,n1_0.added_at,n1_0.added_by,n1_0.content,n1_0.title from news n1_0
+2026-07-15T09:25:58.832+05:00 DEBUG 8589 --- [lecture02] [main] [                                                 ] org.hibernate.SQL                        : delete from news where news_id=?
+2026-07-15T09:25:58.832+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (1:BIGINT) <- [1]
+2026-07-15T09:25:58.836+05:00 DEBUG 8589 --- [lecture02] [main] [                                                 ] org.hibernate.SQL                        : delete from news where news_id=?
+2026-07-15T09:25:58.837+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (1:BIGINT) <- [2]
+2026-07-15T09:25:58.840+05:00 DEBUG 8589 --- [lecture02] [main] [                                                 ] org.hibernate.SQL                        : insert into news (added_at,added_by,content,title,news_id) values (?,?,?,?,default)
+2026-07-15T09:25:58.840+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (1:TIMESTAMP) <- [null]
+2026-07-15T09:25:58.842+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [null]
+2026-07-15T09:25:58.842+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Spring Boot Content]
+2026-07-15T09:25:58.842+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [Spring Boot]
+2026-07-15T09:25:58.845+05:00 DEBUG 8589 --- [lecture02] [main] [                                                 ] org.hibernate.SQL                        : insert into news (added_at,added_by,content,title,news_id) values (?,?,?,?,default)
+2026-07-15T09:25:58.846+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (1:TIMESTAMP) <- [null]
+2026-07-15T09:25:58.846+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [null]
+2026-07-15T09:25:58.846+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Java Content]
+2026-07-15T09:25:58.846+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [Java]
+2026-07-15T09:25:58.852+05:00 DEBUG 8589 --- [lecture02] [main] [                                                 ] org.hibernate.SQL                        : insert into news (added_at,added_by,content,title,news_id) values (?,?,?,?,default)
+2026-07-15T09:25:58.853+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (1:TIMESTAMP) <- [null]
+2026-07-15T09:25:58.853+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [reporterA]
+2026-07-15T09:25:58.853+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [This test should succeed]
+2026-07-15T09:25:58.853+05:00 TRACE 8589 --- [lecture02] [main] [                                                 ] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [News by Reporter A]
+2026-07-15T09:25:58.978+05:00 DEBUG 8589 --- [lecture02] [main] [a2780da9792aa94651835eaf436bc13c-746d6f8ecec8611e] org.hibernate.SQL                        : select n1_0.news_id,n1_0.added_at,n1_0.added_by,n1_0.content,n1_0.title from news n1_0 where n1_0.news_id=?
+2026-07-15T09:25:58.979+05:00 TRACE 8589 --- [lecture02] [main] [a2780da9792aa94651835eaf436bc13c-746d6f8ecec8611e] org.hibernate.orm.jdbc.bind              : binding parameter (1:BIGINT) <- [5]
+2026-07-15T09:25:58.986+05:00 DEBUG 8589 --- [lecture02] [main] [a2780da9792aa94651835eaf436bc13c-746d6f8ecec8611e] org.hibernate.SQL                        : select n1_0.news_id,n1_0.added_at,n1_0.added_by,n1_0.content,n1_0.title from news n1_0 where n1_0.news_id=?
+2026-07-15T09:25:58.986+05:00 TRACE 8589 --- [lecture02] [main] [a2780da9792aa94651835eaf436bc13c-746d6f8ecec8611e] org.hibernate.orm.jdbc.bind              : binding parameter (1:BIGINT) <- [5]
+2026-07-15T09:25:58.994+05:00 DEBUG 8589 --- [lecture02] [main] [a2780da9792aa94651835eaf436bc13c-746d6f8ecec8611e] org.hibernate.SQL                        : update news set added_at=?,added_by=?,content=?,title=? where news_id=?
+2026-07-15T09:25:58.996+05:00 TRACE 8589 --- [lecture02] [main] [a2780da9792aa94651835eaf436bc13c-746d6f8ecec8611e] org.hibernate.orm.jdbc.bind              : binding parameter (1:TIMESTAMP) <- [2026-07-15T09:25:58.983362534]
+2026-07-15T09:25:58.998+05:00 TRACE 8589 --- [lecture02] [main] [a2780da9792aa94651835eaf436bc13c-746d6f8ecec8611e] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [reporterA]
+2026-07-15T09:25:58.999+05:00 TRACE 8589 --- [lecture02] [main] [a2780da9792aa94651835eaf436bc13c-746d6f8ecec8611e] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Should pass because owner is updating]
+2026-07-15T09:25:59.000+05:00 TRACE 8589 --- [lecture02] [main] [a2780da9792aa94651835eaf436bc13c-746d6f8ecec8611e] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [Updated by Reporter A]
+2026-07-15T09:25:59.000+05:00 TRACE 8589 --- [lecture02] [main] [a2780da9792aa94651835eaf436bc13c-746d6f8ecec8611e] org.hibernate.orm.jdbc.bind              : binding parameter (5:BIGINT) <- [5]
+2026-07-15T09:25:59.175+05:00  WARN 8589 --- [lecture02] [SpringApplicationShutdownHook] [                                                 ] i.m.registry.otlp.OtlpMeterRegistry      : Failed to publish metrics to OTLP receiver (context: url=http://localhost:4318/v1/metrics, resource-attributes={service.name=lecture02})
+
+java.lang.Exception: java.net.ConnectException: Connection refused
+	at io.micrometer.registry.otlp.OtlpHttpMetricsSender.send(OtlpHttpMetricsSender.java:61) ~[micrometer-registry-otlp-1.16.6.jar:1.16.6]
+	at io.micrometer.registry.otlp.OtlpMeterRegistry.publish(OtlpMeterRegistry.java:190) ~[micrometer-registry-otlp-1.16.6.jar:1.16.6]
+	at io.micrometer.core.instrument.push.PushMeterRegistry.publishSafelyOrSkipIfInProgress(PushMeterRegistry.java:63) ~[micrometer-core-1.16.6.jar:1.16.6]
+	at io.micrometer.core.instrument.push.PushMeterRegistry.close(PushMeterRegistry.java:143) ~[micrometer-core-1.16.6.jar:1.16.6]
+	at io.micrometer.registry.otlp.OtlpMeterRegistry.close(OtlpMeterRegistry.java:305) ~[micrometer-registry-otlp-1.16.6.jar:1.16.6]
+	at org.springframework.boot.micrometer.metrics.autoconfigure.MetricsAutoConfiguration$MeterRegistryCloser.onApplicationEvent(MetricsAutoConfiguration.java:123) ~[spring-boot-micrometer-metrics-4.0.7.jar:4.0.7]
+	at org.springframework.boot.micrometer.metrics.autoconfigure.MetricsAutoConfiguration$MeterRegistryCloser.onApplicationEvent(MetricsAutoConfiguration.java:101) ~[spring-boot-micrometer-metrics-4.0.7.jar:4.0.7]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:180) ~[spring-context-7.0.8.jar:7.0.8]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:173) ~[spring-context-7.0.8.jar:7.0.8]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:151) ~[spring-context-7.0.8.jar:7.0.8]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:448) ~[spring-context-7.0.8.jar:7.0.8]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:381) ~[spring-context-7.0.8.jar:7.0.8]
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1190) ~[spring-context-7.0.8.jar:7.0.8]
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1153) ~[spring-context-7.0.8.jar:7.0.8]
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:147) ~[spring-boot-4.0.7.jar:4.0.7]
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[na:na]
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116) ~[spring-boot-4.0.7.jar:4.0.7]
+	at java.base/java.lang.Thread.run(Thread.java:1474) ~[na:na]
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:639) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:543) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:594) ~[na:na]
+	at java.base/java.net.Socket.connect(Socket.java:659) ~[na:na]
+	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:161) ~[na:na]
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:516) ~[na:na]
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:604) ~[na:na]
+	at java.base/sun.net.www.http.HttpClient.<init>(HttpClient.java:276) ~[na:na]
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:380) ~[na:na]
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:393) ~[na:na]
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1030) ~[na:na]
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:963) ~[na:na]
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:899) ~[na:na]
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:872) ~[na:na]
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getOutputStream0(HttpURLConnection.java:1163) ~[na:na]
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getOutputStream(HttpURLConnection.java:1127) ~[na:na]
+	at io.micrometer.core.ipc.http.HttpUrlConnectionSender.send(HttpUrlConnectionSender.java:99) ~[micrometer-core-1.16.6.jar:1.16.6]
+	at io.micrometer.core.ipc.http.HttpSender$Request$Builder.send(HttpSender.java:306) ~[micrometer-core-1.16.6.jar:1.16.6]
+	at io.micrometer.registry.otlp.OtlpHttpMetricsSender.send(OtlpHttpMetricsSender.java:58) ~[micrometer-registry-otlp-1.16.6.jar:1.16.6]
+	... 17 common frames omitted
+
+2026-07-15T09:25:59.186+05:00  INFO 8589 --- [lecture02] [SpringApplicationShutdownHook] [                                                 ] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-15T09:26:09.191+05:00  INFO 8589 --- [lecture02] [SpringApplicationShutdownHook] [                                                 ] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-15T09:26:09.193+05:00  INFO 8589 --- [lecture02] [SpringApplicationShutdownHook] [                                                 ] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

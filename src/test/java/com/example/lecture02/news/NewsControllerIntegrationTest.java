@@ -202,7 +202,7 @@ public class NewsControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "reporterB", roles = {"REPORTER"})
-    void reporterB_ShouldNotBeAbleToEditTheirReporterANews() throws Exception {
+    void reporterB_ShouldNotBeAbleToEditReporterANews() throws Exception {
 
         News newsByReporterA = new News();
         newsByReporterA.setTitle("Reporter A's News");
@@ -223,5 +223,28 @@ public class NewsControllerIntegrationTest {
                 .content(objectMapper.writeValueAsString(updatePayload)))
                 .andExpect(status().isForbidden());
 
+    }
+
+    @Test
+    @WithMockUser(username = "reporterA", roles = {"REPORTER"})
+    void reporter_ShouldBeAbleToEditTheirOwnNews() throws Exception {
+
+        News news = new News();
+        news.setContent("This test should succeed");
+        news.setTitle("News by Reporter A");
+        news.setAddedBy("reporterA");
+
+        news = newsRepository.save(news);
+        Long newsId = news.getNewsId();
+
+        News updatePayload = new News();
+        updatePayload.setTitle("Updated by Reporter A");
+        updatePayload.setContent("Should pass because owner is updating");
+
+
+        mockMvc.perform(post("/api/v1/news/id/" + newsId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatePayload)))
+                .andExpect(status().isOk());
     }
 }

@@ -1,7 +1,5 @@
-package com.example.lecture02.news;
+package com.example.lecture02.user;
 
-import com.example.lecture02.user.User;
-import com.example.lecture02.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
