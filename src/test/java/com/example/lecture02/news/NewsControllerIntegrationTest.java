@@ -165,20 +165,63 @@ public class NewsControllerIntegrationTest {
         mockNews.setContent("This should fail");
 
         mockMvc.perform(post("/api/v1/news")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(mockNews)))
-                .andDo(result -> {
-                    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-                    System.out.println(auth);
-                });
-
-        mockMvc.perform(post("/api/v1/news")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(mockNews)))
                 .andExpect(status().isForbidden());
 
-//        Mockito.verifyNoInteractions(newsService);
+    }
+
+    @Test
+    @WithMockUser(username = "readerUser", roles = {"EDITOR"})
+    void editor_ShouldBeAbleToUploadNews() throws Exception {
+        News mockNews = new News();
+        mockNews.setTitle("Authorized Article");
+        mockNews.setContent("This should pass");
+
+        mockMvc.perform(post("/api/v1/news")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(mockNews)))
+                .andExpect(status().isCreated());
 
     }
 
+
+    @Test
+    @WithMockUser(username = "readerUser", roles = {"REPORTER"})
+    void reporter_ShouldBeAbleToUploadNews() throws Exception {
+        News mockNews = new News();
+        mockNews.setTitle("Authorized Article");
+        mockNews.setContent("This should pass");
+
+        mockMvc.perform(post("/api/v1/news")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(mockNews)))
+                .andExpect(status().isCreated());
+
+    }
+
+    @Test
+    @WithMockUser(username = "reporterB", roles = {"REPORTER"})
+    void reporterB_ShouldNotBeAbleToEditTheirReporterANews() throws Exception {
+
+        News newsByReporterA = new News();
+        newsByReporterA.setTitle("Reporter A's News");
+        newsByReporterA.setContent("Reporter A's Content");
+        newsByReporterA.setAddedBy("reporterA");
+        newsByReporterA = newsRepository.save(newsByReporterA);
+
+        System.out.println("DEBUG: Generated News ID is -> " + newsByReporterA.getNewsId());
+
+        Long newsId = newsByReporterA.getNewsId();
+
+        News updatePayload = new News();
+        updatePayload.setTitle("Hacked Title by Reporter B");
+        updatePayload.setContent("This update should be rejected");
+
+        mockMvc.perform(post("/api/v1/news/id/" + newsId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatePayload)))
+                .andExpect(status().isForbidden());
+
+    }
 }
