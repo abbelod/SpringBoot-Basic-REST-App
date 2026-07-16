@@ -29,3 +29,8 @@ databaseChangeLog:
                   type: VARCHAR(100)
                   constraints:
                     nullable: false
+              - column:
+                  name: api_token
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: false
