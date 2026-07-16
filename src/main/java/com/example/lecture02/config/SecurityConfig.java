@@ -1,17 +1,13 @@
 package com.example.lecture02.config;
 
 
-import com.example.lecture02.auth.TokenAuthenticationSuccessHandler;
 import com.example.lecture02.auth.TokenRequestFilter;
-import com.example.lecture02.user.User;
 import com.example.lecture02.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,12 +22,10 @@ import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 public class SecurityConfig {
 
     private final UserService userService;
-    private final TokenAuthenticationSuccessHandler successHandler;
     private final TokenRequestFilter tokenRequestFilter;
 
-    public SecurityConfig(TokenAuthenticationSuccessHandler tokenAuthenticationSuccessHandler, TokenRequestFilter tokenRequestFilter, UserService userService) {
+    public SecurityConfig( TokenRequestFilter tokenRequestFilter, UserService userService) {
         this.tokenRequestFilter = tokenRequestFilter;
-        this.successHandler = tokenAuthenticationSuccessHandler;
         this.userService = userService;
     }
 
