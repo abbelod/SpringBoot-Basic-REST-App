@@ -57,7 +57,6 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//                .httpBasic(Customizer.withDefaults());
 
         http.addFilterBefore(tokenRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
