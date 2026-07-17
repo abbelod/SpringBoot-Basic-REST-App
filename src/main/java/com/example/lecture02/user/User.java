@@ -3,8 +3,11 @@ package com.example.lecture02.user;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.security.AlgorithmConstraints;
+import java.util.Collections;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,9 +23,21 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String password;
 
     @Column(nullable = false)
     private String role;
+
+    @Column(unique = true)
+    private String apiToken;
+
+    public List<SimpleGrantedAuthority> getAuthorities()
+    {
+        if( this.role == null) {
+            return Collections.emptyList();
+        }
+        String formattedRole = this.role.startsWith("ROLE_") ? this.role : "ROLE_" + this.role;
+        return Collections.singletonList(new SimpleGrantedAuthority(formattedRole));
+    }
 }

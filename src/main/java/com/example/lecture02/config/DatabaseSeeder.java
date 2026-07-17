@@ -16,10 +16,10 @@ public class DatabaseSeeder {
     CommandLineRunner seedUsers(UserRepository userRepository, PasswordEncoder encoder) {
       return args -> {
           if(userRepository.count()== 0) {
-              userRepository.save(new User(null, "readerUser", encoder.encode("pass"), "ROLE_READER"));
-              userRepository.save(new User(null, "editorUser", encoder.encode("pass"), "ROLE_EDITOR"));
-              userRepository.save(new User(null, "reporterUser1", encoder.encode("pass"), "ROLE_REPORTER"));
-              userRepository.save(new User(null, "reporterUser2", encoder.encode("pass"), "ROLE_REPORTER"));
+              userRepository.save(new User(null, "readerUser", encoder.encode("pass"), "ROLE_READER" , null));
+              userRepository.save(new User(null, "editorUser", encoder.encode("pass"), "ROLE_EDITOR", null));
+              userRepository.save(new User(null, "reporterUser1", encoder.encode("pass"), "ROLE_REPORTER", null));
+              userRepository.save(new User(null, "reporterUser2", encoder.encode("pass"), "ROLE_REPORTER", null));
           }
       };
     }
