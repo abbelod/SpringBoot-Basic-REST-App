@@ -11,8 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -31,10 +29,6 @@ public class SecurityConfig {
         this.tokenRequestFilter = tokenRequestFilter;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -44,9 +38,9 @@ public class SecurityConfig {
 
 
         http
-//            .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-//                    .csrfTokenRequestHandler(requestHandler))
-                .csrf(AbstractHttpConfigurer::disable)
+            .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                    .csrfTokenRequestHandler(requestHandler))
+//                .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET,"/api/v1/news/**").hasAnyRole("EDITOR", "REPORTER", "READER")
                         .requestMatchers("/swagger-ui/**").permitAll()
@@ -77,7 +71,7 @@ public class SecurityConfig {
             // Check if the user logged in via Google OAuth2
             if (authentication.getPrincipal() instanceof org.springframework.security.oauth2.core.user.OAuth2User oauth2User) {
                 // Extract the email address from Google to use as their username
-                username = oauth2User.getAttribute("email");
+                username = oauth2User.getAttribute("login");
             } else {
                 // Standard form login username
                 username = authentication.getName();

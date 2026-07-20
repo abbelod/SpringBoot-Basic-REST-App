@@ -1,18 +1,23 @@
 package com.example.lecture02.user;
 
 
+import com.example.lecture02.config.PasswordEncoderConfig;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
 
+
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public String generateToken(String username) {
@@ -23,6 +28,7 @@ public class UserService {
                     newUser.setUsername(username);
                     newUser.setRole("ROLE_REPORTER");
                     newUser.setPassword(null);
+                    newUser.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
                     return newUser;
                 });
 
