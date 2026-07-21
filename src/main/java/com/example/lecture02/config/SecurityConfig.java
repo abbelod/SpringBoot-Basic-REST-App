@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -68,13 +70,29 @@ public class SecurityConfig {
         return (request, response, authentication) -> {
             String username;
 
-            // Check if the user logged in via Google OAuth2
-            if (authentication.getPrincipal() instanceof org.springframework.security.oauth2.core.user.OAuth2User oauth2User) {
-                // Extract the email address from Google to use as their username
-                username = oauth2User.getAttribute("login");
+            // Check if the user logged in via OAuth2 (Google or GitHub)
+            if (authentication instanceof OAuth2AuthenticationToken oauthToken) {
+                OAuth2User oauth2User = oauthToken.getPrincipal();
+                String registrationId = oauthToken.getAuthorizedClientRegistrationId(); // "google" or "github"
+
+                if ("google".equalsIgnoreCase(registrationId)) {
+                    // Google returns email
+                    username = oauth2User.getAttribute("email");
+                } else if ("github".equalsIgnoreCase(registrationId)) {
+                    // GitHub returns login (username) or email
+                    username = oauth2User.getAttribute("login");
+                } else {
+                    // Fallback for any other provider or default attribute
+                    username = oauth2User.getName();
+                }
             } else {
-                // Standard form login username
+                // Standard form-based / DaoAuthenticationProvider username
                 username = authentication.getName();
+            }
+
+            // Defensive check in case the provider didn't yield a valid string
+            if (username == null) {
+                throw new IllegalStateException("Could not extract username from OAuth2 principal.");
             }
 
             // Generate your UUID token, save it to the DB, and print it to the screen
