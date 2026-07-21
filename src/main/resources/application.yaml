@@ -29,7 +29,6 @@ spring:
               - profile
               - email
 
-
 logging:
   file:
     name: logs/myapp.log
@@ -56,3 +55,10 @@ jdbc:
   datasource-proxy:
     enabled: true
   includes: connection, query, fetch
+
+
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET_KEY}
+      expiration-ms: 86400000

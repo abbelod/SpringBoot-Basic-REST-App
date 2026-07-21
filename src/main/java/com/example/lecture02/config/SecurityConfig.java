@@ -1,7 +1,11 @@
 package com.example.lecture02.config;
 
 
+import com.example.lecture02.auth.JwtAuthenticationFilter;
+import com.example.lecture02.auth.JwtService;
 import com.example.lecture02.auth.TokenRequestFilter;
+import com.example.lecture02.user.User;
+import com.example.lecture02.user.UserRepository;
 import com.example.lecture02.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +15,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,21 +26,29 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
+import java.util.UUID;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final UserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
     private final UserService userService;
-    private final TokenRequestFilter tokenRequestFilter;
 
-    public SecurityConfig(UserService userService, TokenRequestFilter tokenRequestFilter) {
+    public SecurityConfig(UserService userService, UserDetailsService userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter, PasswordEncoder passwordEncoder, JwtService jwtService) {
+        this.userDetailsService = userDetailsService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
         this.userService = userService;
-        this.tokenRequestFilter = tokenRequestFilter;
     }
 
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtService jwtService) throws Exception {
 
         CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
         requestHandler.setCsrfRequestAttributeName(null); // Spring Security 6 default handling
@@ -61,12 +76,12 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.addFilterBefore(tokenRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
-    public AuthenticationSuccessHandler customSuccessHandler() {
+    public AuthenticationSuccessHandler customSuccessHandler()  {
         return (request, response, authentication) -> {
             String username;
 
@@ -95,7 +110,7 @@ public class SecurityConfig {
                 throw new IllegalStateException("Could not extract username from OAuth2 principal.");
             }
 
-            // Generate your UUID token, save it to the DB, and print it to the screen
+
             String token = userService.generateToken(username);
 
             response.setContentType("application/json");
