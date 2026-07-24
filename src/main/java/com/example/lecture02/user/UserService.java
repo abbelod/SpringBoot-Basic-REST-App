@@ -1,12 +1,17 @@
 package com.example.lecture02.user;
 
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -16,6 +21,13 @@ public class UserService {
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+
+    public void setApiToken(String username, String token) {
+        User user = findOrCreateUser(username);
+        user.setApiToken(token);
+        userRepository.save(user);
     }
 
     public User findOrCreateUser(String username) {
@@ -29,5 +41,14 @@ public class UserService {
         });
         return user;
 
+    }
+
+//    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(fixedRate = 30000)
+    public void revokeToken() {
+        userRepository.findAll().forEach(user -> log.info("username: {} api: {}", user.getUsername(), user.getApiToken()));
+       int revokedCount = userRepository.revokeAllApiTokens();
+       log.info("Successfully Revoked API Tokens for {} users",revokedCount);
+       userRepository.findAll().forEach(user -> log.info("username: {} api: {}", user.getUsername(), user.getApiToken()));
     }
 }

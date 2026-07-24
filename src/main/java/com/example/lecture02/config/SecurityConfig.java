@@ -1,6 +1,8 @@
 package com.example.lecture02.config;
 
 
+import com.example.lecture02.user.User;
+import com.example.lecture02.user.UserRepository;
 import com.example.lecture02.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -37,6 +39,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Map;
+import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
@@ -127,7 +130,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationSuccessHandler customSuccessHandler(JwtEncoder jwtEncoder) {
+    public AuthenticationSuccessHandler customSuccessHandler(JwtEncoder jwtEncoder ) {
         return (request, response, authentication) -> {
             String username = null;
 
@@ -176,6 +179,8 @@ public class SecurityConfig {
                     .build();
 
             String token = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+
+            userService.setApiToken(username, token);
 
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
