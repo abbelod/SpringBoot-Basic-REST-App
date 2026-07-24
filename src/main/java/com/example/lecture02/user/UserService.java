@@ -17,8 +17,9 @@ public class UserService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
+
     public User findOrCreateUser(String username) {
-        User user = userRepository.findByUsername(username).orElseGet(()-> {
+        User user = userRepository.findByUsername(username).orElseGet(() -> {
             User newUser = new User();
             newUser.setUsername(username);
             newUser.setRole("ROLE_REPORTER");

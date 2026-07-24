@@ -2,6 +2,7 @@ package com.example.lecture02.config;
 
 
 import com.example.lecture02.user.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
@@ -35,6 +36,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.time.Instant;
 import java.util.Base64;
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -99,22 +101,22 @@ public class SecurityConfig {
 
 
         http
-            .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                    .csrfTokenRequestHandler(requestHandler))
+                .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .csrfTokenRequestHandler(requestHandler))
 //                .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET,"/api/v1/news/**").hasAnyRole("EDITOR", "REPORTER", "READER")
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET, "/api/v1/news/**").hasAnyRole("EDITOR", "REPORTER", "READER")
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/v1/news/**").hasAnyRole("EDITOR", "REPORTER")
-                    .requestMatchers(HttpMethod.DELETE, "/api/v1/news/**").hasRole("EDITOR")
-                    .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/news/**").hasAnyRole("EDITOR", "REPORTER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/news/**").hasRole("EDITOR")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .successHandler(customSuccessHandler(jwtEncoder)) // Prints your UUID token on screen
                         .permitAll()
                 )
-                .oauth2ResourceServer(rs-> rs.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
+                .oauth2ResourceServer(rs -> rs.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(customSuccessHandler(jwtEncoder)) // Prints a UUID token for Google users too!
                         .permitAll()
@@ -125,13 +127,15 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationSuccessHandler customSuccessHandler(JwtEncoder jwtEncoder)  {
+    public AuthenticationSuccessHandler customSuccessHandler(JwtEncoder jwtEncoder) {
         return (request, response, authentication) -> {
-            String username;
+            String username = null;
 
             // Check if the user logged in via OAuth2 (Google or GitHub)
             if (authentication instanceof OAuth2AuthenticationToken oauthToken) {
                 OAuth2User oauth2User = oauthToken.getPrincipal();
+                if (oauth2User != null) {
+
                 String registrationId = oauthToken.getAuthorizedClientRegistrationId(); // "google" or "github"
 
                 if ("google".equalsIgnoreCase(registrationId)) {
@@ -144,6 +148,7 @@ public class SecurityConfig {
                     // Fallback for any other provider or default attribute
                     username = oauth2User.getName();
                 }
+            }
             } else {
                 // Standard form-based / DaoAuthenticationProvider username
                 username = authentication.getName();
@@ -174,8 +179,12 @@ public class SecurityConfig {
 
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"token\": \"" + token + "\"}");
-            response.getWriter().flush();
+
+            Map<String, String> tokenResponse = Map.of("token", token);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.writeValue(response.getWriter(), tokenResponse);
+
         };
     }
 

@@ -1,27 +1,42 @@
 package com.example.lecture02.news;
 
+import com.example.lecture02.news.dto.NewsResponse;
+import com.example.lecture02.news.dto.UploadNewsRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
+import org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientAutoConfiguration;
+import org.springframework.boot.security.oauth2.client.autoconfigure.servlet.OAuth2ClientWebSecurityAutoConfiguration;
+import org.springframework.boot.security.oauth2.server.resource.autoconfigure.servlet.OAuth2ResourceServerAutoConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(NewsController.class)
+@WebMvcTest(controllers = NewsController.class,
+        excludeAutoConfiguration = {
+                SecurityAutoConfiguration.class,
+                OAuth2ClientAutoConfiguration.class,
+                OAuth2ClientWebSecurityAutoConfiguration.class,
+                OAuth2ResourceServerAutoConfiguration.class
+        })
 public class NewsControllerTest {
 
     @Autowired
@@ -85,30 +100,6 @@ public class NewsControllerTest {
                 .andExpect(jsonPath("$.content[0].title").value("News 1 title test"))
                 .andExpect(jsonPath("$.content[1].newsId").value(2))
                 .andExpect(jsonPath("$.content[1].title").value("News 2 title test"));
-    }
-
-    @Test
-    void shouldCreateNews() throws Exception {
-
-        News requestNews = new News();
-        requestNews.setTitle("Test News");
-        requestNews.setContent("Test News Content");
-
-        News savedNews = new News();
-        savedNews.setNewsId(1L);
-        savedNews.setTitle("Test News");
-        savedNews.setContent("Test News Content");
-
-        Mockito.when(newsService.uploadNews(any(News.class), any(String.class)))
-                .thenReturn(savedNews);
-
-        mockMvc.perform(post("/api/v1/news")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestNews)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.newsId").value(1))
-                .andExpect(jsonPath("$.title").value("Test News"))
-                .andExpect(jsonPath("$.content").value("Test News Content"));
     }
 
 }

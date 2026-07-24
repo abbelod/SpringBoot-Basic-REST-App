@@ -1,5 +1,6 @@
 package com.example.lecture02.news;
 
+import com.example.lecture02.config.DatabaseSeeder;
 import com.example.lecture02.config.SecurityConfig;
 import com.example.lecture02.user.User;
 import com.example.lecture02.user.UserRepository;
@@ -15,7 +16,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -34,10 +38,14 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 @Import(SecurityConfig.class)
 public class NewsControllerIntegrationTest {
 
     Long newsId;
+
+    @MockitoBean
+    private ClientRegistrationRepository clientRegistrationRepository;
 
     @Autowired
     private WebApplicationContext context;
@@ -59,8 +67,8 @@ public class NewsControllerIntegrationTest {
 
         this.mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
-                        .apply(springSecurity())
-                                .build();
+                .apply(springSecurity())
+                .build();
 
         newsRepository.deleteAll();
 
@@ -81,6 +89,7 @@ public class NewsControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(username = "readerUser", roles = {"READER"})
     void shouldReturnAllNews() throws Exception {
 
         mockMvc.perform(get("/api/v1/news"))
@@ -92,15 +101,17 @@ public class NewsControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(username = "readerUser", roles = {"READER"})
     void shouldReturnNewsById() throws Exception {
 
-        mockMvc.perform(get("/api/v1/news/id/1202"))
+        mockMvc.perform(get("/api/v1/news/id/" + this.newsId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.newsId").value(1))
+                .andExpect(jsonPath("$.newsId").value(this.newsId))
                 .andExpect(jsonPath("$.title").value("Spring Boot"));
     }
 
     @Test
+    @WithMockUser(username = "reporterUser", roles = {"REPORTER"})
     void shouldCreateNews() throws Exception {
 
         News news = new News();
@@ -110,11 +121,13 @@ public class NewsControllerIntegrationTest {
 
 
         mockMvc.perform(post("/api/v1/news")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(news)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(news))
+                        .with(csrf()))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.newsId").exists())
                 .andExpect(jsonPath("$.title").value("Spring Boot"))
+                .andExpect(jsonPath("$.addedBy").value("reporterUser"))
                 .andExpect(jsonPath("$.content").value("Learning Spring Boot"));
 
         List<News> allNews = newsRepository.findAll();
@@ -123,42 +136,19 @@ public class NewsControllerIntegrationTest {
     }
 
     @Test
-    void shouldUpdateNews() throws Exception {
-
-        News news = new News();
-        news.setNewsId(1L);
-        news.setTitle("Updated Title");
-        news.setContent("Updated Content");
-
-        mockMvc.perform(get("/api/v1/news/id/1"))
-                .andExpect(jsonPath("$.content").value("Spring Boot Content"))
-                .andExpect(jsonPath("$.title").value("Spring Boot"));
-
-        mockMvc.perform(post("/api/v1/news/id/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(news)))
-                        .andExpect(jsonPath("$.content").value("Updated Content"))
-                        .andExpect(jsonPath("$.title").value("Updated Title"));
-
-        Optional<News> newsInDb = newsRepository.findById(1L);
-        assertEquals(newsInDb.isPresent(), true);
-        assertEquals(newsInDb.get().getTitle(), "Updated Title");
-        assertEquals(newsInDb.get().getContent(), "Updated Content");
-
-    }
-
-    @Test
+    @WithMockUser(username = "editorUser", roles = {"EDITOR"})
     void shouldDeleteNews() throws Exception {
 
-        mockMvc.perform(get("/api/v1/news/id/1"))
+        mockMvc.perform(get("/api/v1/news/id/" + newsId)
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").value("Spring Boot Content"))
                 .andExpect(jsonPath("$.title").value("Spring Boot"));
 
-        mockMvc.perform(delete("/api/v1/news/id/1"))
+        mockMvc.perform(delete("/api/v1/news/id/" + newsId).with(csrf()))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(delete("/api/v1/news/id/1"))
+        mockMvc.perform(delete("/api/v1/news/id/" + newsId).with(csrf()))
                 .andExpect(status().isNotFound());
 
     }
@@ -171,9 +161,9 @@ public class NewsControllerIntegrationTest {
         mockNews.setContent("This should fail");
 
         mockMvc.perform(post("/api/v1/news")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(mockNews))
-                .with(csrf()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(mockNews))
+                        .with(csrf()))
                 .andExpect(status().isForbidden());
 
     }
@@ -234,7 +224,10 @@ public class NewsControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatePayload))
                         .with(csrf()))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").value("Should pass because Editor is updating"))
+                .andExpect(jsonPath("$.title").value("Updated by Editor"));
+
     }
 
 
@@ -272,8 +265,8 @@ public class NewsControllerIntegrationTest {
         updatePayload.setContent("This update should be rejected");
 
         mockMvc.perform(post("/api/v1/news/id/" + newsId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updatePayload))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatePayload))
                         .with(csrf()))
                 .andExpect(status().isForbidden());
 
@@ -297,8 +290,8 @@ public class NewsControllerIntegrationTest {
 
 
         mockMvc.perform(post("/api/v1/news/id/" + newsId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updatePayload))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatePayload))
                         .with(csrf()))
                 .andExpect(status().isOk());
     }

@@ -1,6 +1,8 @@
 package com.example.lecture02.news;
 
 
+import com.example.lecture02.news.dto.NewsResponse;
+import com.example.lecture02.news.dto.UploadNewsRequest;
 import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,9 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.plaf.OptionPaneUI;
 import java.nio.file.AccessDeniedException;
-import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -21,38 +22,69 @@ public class NewsController {
 
     private final NewsService newsService;
 
-    public NewsController(NewsService newsService){
+    public NewsController(NewsService newsService) {
         this.newsService = newsService;
     }
 
     @GetMapping
-    public Page<News> findAll(@PageableDefault(size = 25) Pageable pageable) {
-        return newsService.findAll(pageable);
+    public ResponseEntity<Page<NewsResponse>> findAll(@PageableDefault(size = 25) Pageable pageable) {
+        Page<NewsResponse> responsePage = newsService.findAll(pageable)
+                .map(news -> new NewsResponse(
+                        news.getNewsId(),
+                        news.getTitle(),
+                        news.getContent(),
+                        news.getAddedBy(),
+                        news.getAddedAt()
+                ));
+
+        return ResponseEntity.ok(responsePage);
     }
 
     @GetMapping("/id/{newsId}")
-    public ResponseEntity<News> findNewsById(@PathVariable Long newsId) {
-        Optional<News> news =  newsService.findNewsById(newsId);
+    public ResponseEntity<NewsResponse> findNewsById(@PathVariable Long newsId) {
 
-        if(news.isPresent()) {
-            return ResponseEntity.ok(news.get());
+        Optional<News> newsOpt = newsService.findNewsById(newsId);
+
+        if (newsOpt.isPresent()) {
+            News news = newsOpt.get();
+            NewsResponse newsResponse = new NewsResponse(
+                    news.getNewsId(),
+                    news.getTitle(),
+                    news.getContent(),
+                    news.getAddedBy(),
+                    news.getAddedAt());
+            return ResponseEntity.ok(newsResponse);
         }
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/search/{keyWord}")
+    public ResponseEntity<Page<NewsResponse>> searchNews(@PathVariable String keyWord, Pageable pageable) {
+        Page<NewsResponse> responsePage = newsService.searchNews(keyWord, pageable)
+                .map(news -> new NewsResponse(
+                        news.getNewsId(),
+                        news.getTitle(),
+                        news.getContent(),
+                        news.getAddedBy(),
+                        news.getAddedAt()
+                ));
+        return ResponseEntity.ok(responsePage);
+    }
+
     @PostMapping
-    public ResponseEntity<News> uploadNews(@RequestBody News news, Authentication authentication) {
-        News uploadedNews = newsService.uploadNews(news, authentication.getName());
+    public ResponseEntity<NewsResponse> uploadNews(@RequestBody UploadNewsRequest request, Authentication authentication) {
+        NewsResponse uploadedNews = newsService.uploadNews(request, authentication.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(uploadedNews);
     }
 
     @PostMapping("/id/{newsId}")
-    public ResponseEntity<News> updateNewsById(@PathVariable long newsId, @RequestBody News news, Authentication authentication) throws AccessDeniedException {
+    public ResponseEntity<NewsResponse> updateNewsById(@PathVariable long newsId, @RequestBody UploadNewsRequest request, Authentication authentication) throws AccessDeniedException {
 
-        boolean isEditor = authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_EDITOR"));
+        boolean isEditor = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> Objects.equals(grantedAuthority.getAuthority(), "ROLE_EDITOR"));
 
-        News updatedNews = newsService.updateNewsById(newsId, news, authentication.getName(), isEditor);
+        assert authentication != null;
+        NewsResponse updatedNews = newsService.updateNewsById(newsId, request, authentication.getName(), isEditor);
         return ResponseEntity.ok(updatedNews);
     }
 
@@ -60,11 +92,13 @@ public class NewsController {
     public ResponseEntity<Void> deleteNewsById(@PathVariable long newsId) {
         boolean deleted = newsService.deleteNewsById(newsId);
 
-        if(deleted) {
+        if (deleted) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
+
+
 
 
 }

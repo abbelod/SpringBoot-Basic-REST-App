@@ -31,7 +31,7 @@ public class JwtService {
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
 
-        return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader , claims)).getTokenValue();
+        return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
     }
 
 }

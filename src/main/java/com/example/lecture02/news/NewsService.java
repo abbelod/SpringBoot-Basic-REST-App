@@ -1,12 +1,13 @@
 package com.example.lecture02.news;
 
+import com.example.lecture02.news.dto.NewsResponse;
+import com.example.lecture02.news.dto.UploadNewsRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,34 +24,57 @@ public class NewsService {
         return newsRepository.findAll(pageable);
     }
 
+    public Page<News> searchNews(String keyWord, Pageable pageable) {
+        return newsRepository.findByKeyword(keyWord, pageable);
+    }
+
     public Optional<News> findNewsById(Long newsId) {
         return newsRepository.findById(newsId);
     }
 
-    public News uploadNews(News news, String username) {
+    public NewsResponse uploadNews(UploadNewsRequest request, String username) {
+        News news = new News();
+        news.setContent(request.getContent());
+        news.setTitle(request.getTitle());
         news.setAddedBy(username);
         news.setAddedAt(LocalDateTime.now());
-        return newsRepository.save(news);
+
+        News savedNews = newsRepository.save(news);
+
+        return new NewsResponse(
+                savedNews.getNewsId(),
+                savedNews.getTitle(),
+                savedNews.getContent(),
+                savedNews.getAddedBy(),
+                savedNews.getAddedAt()
+        );
     }
 
-    public News updateNewsById(Long newsId, News updatedNews, String username, boolean isEditor) throws AccessDeniedException {
+    public NewsResponse updateNewsById(Long newsId, UploadNewsRequest request, String username, boolean isEditor) throws AccessDeniedException {
 
         News existingNews = newsRepository.findById(newsId).orElseThrow(() -> new RuntimeException("News not found!"));
 
-        if(!isEditor && !existingNews.getAddedBy().equals(username)) {
+        if (!isEditor && !existingNews.getAddedBy().equals(username)) {
             throw new AccessDeniedException("Access Denied: Reporters can only edit their own news");
         }
 
-        existingNews.setTitle(updatedNews.getTitle());
-        existingNews.setContent(updatedNews.getContent());
+        existingNews.setTitle(request.getTitle());
+        existingNews.setContent(request.getContent());
         existingNews.setAddedAt(LocalDateTime.now());
 
-        return newsRepository.save(existingNews);
+        News savedNews = newsRepository.save(existingNews);
+        return new NewsResponse(
+                savedNews.getNewsId(),
+                savedNews.getTitle(),
+                savedNews.getContent(),
+                savedNews.getAddedBy(),
+                savedNews.getAddedAt()
+        );
     }
 
     public boolean deleteNewsById(long newsId) {
 
-        if(!newsRepository.existsById(newsId)) {
+        if (!newsRepository.existsById(newsId)) {
             return false;
         }
         newsRepository.deleteById(newsId);
