@@ -43,8 +43,7 @@ public class UserService {
 
     }
 
-//    @Scheduled(cron = "0 0 0 * * ?")
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(cron = "0 0 0 * * ?")
     public void revokeToken() {
         userRepository.findAll().forEach(user -> log.info("username: {} api: {}", user.getUsername(), user.getApiToken()));
        int revokedCount = userRepository.revokeAllApiTokens();
