@@ -58,8 +58,8 @@ public class NewsController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/search/{keyWord}")
-    public ResponseEntity<Page<NewsResponse>> searchNews(@PathVariable String keyWord, Pageable pageable) {
+    @GetMapping("/search")
+    public ResponseEntity<Page<NewsResponse>> searchNews(@RequestParam(name= "keyWord", defaultValue = "") String keyWord, Pageable pageable) {
         Page<NewsResponse> responsePage = newsService.searchNews(keyWord, pageable)
                 .map(news -> new NewsResponse(
                         news.getNewsId(),
