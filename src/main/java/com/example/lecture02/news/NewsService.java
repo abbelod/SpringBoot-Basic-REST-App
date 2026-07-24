@@ -2,6 +2,8 @@ package com.example.lecture02.news;
 
 import com.example.lecture02.news.dto.NewsResponse;
 import com.example.lecture02.news.dto.UploadNewsRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ public class NewsService {
         this.newsRepository = newsRepository;
     }
 
+    @Cacheable(value="news")
     public Page<News> findAll(Pageable pageable) {
         return newsRepository.findAll(pageable);
     }
